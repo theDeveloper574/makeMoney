@@ -44,7 +44,7 @@ class UserAccount extends ChangeNotifier {
         ///send verification ID
       },
       codeAutoRetrievalTimeout: (e) {
-        AppUtils().toast(e.toString());
+        // AppUtils().toast(e.toString());
         isPhoneAuth = false;
         notifyListeners();
       },
@@ -82,16 +82,26 @@ class UserAccount extends ChangeNotifier {
 
   Future<void> checkAccount(User user) async {
     final userDoc = await FirebaseFirestore.instance
-        .collection('users')
+        // .collection('users')
+        .collection('futureInvestUsers')
         .doc(user.uid)
         .get();
     if (userDoc.exists) {
-      AppUtils().toast("Login successfull.");
+      AppUtils().toast("Login successfully.");
       Get.offAll(() => const HomePage());
     } else {
       AppUtils().toast("Please Create Account");
-      Get.off(() => CrateUserAccount());
+      Get.offAll(() => CrateUserAccount());
     }
+    notifyListeners();
+  }
+
+  void disposeValue() {
+    isPhoneAuth = false;
+    isVerifyingPhone = false;
+    isVerifyingOpt = false;
+    verId = null;
+    phoneNum = null;
     notifyListeners();
   }
 }

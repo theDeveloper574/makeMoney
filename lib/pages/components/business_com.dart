@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -7,11 +8,13 @@ import 'package:makemoney/pages/accountsView/create_user_account.dart';
 import 'package:makemoney/pages/accountsView/phone_auth.dart';
 import 'package:makemoney/pages/views/chat_view.dart';
 import 'package:makemoney/pages/views/cu_user_profile_view.dart';
-import 'package:makemoney/service/stateManagment/provider/user_provider.dart';
+import 'package:makemoney/service/stateManagment/provider/cu_user_provider.dart';
 import 'package:makemoney/widgets/boxes.dart';
 import 'package:makemoney/widgets/container_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/commen/app_utils.dart';
+import '../../service/stateManagment/provider/fetch_task_provider.dart';
 import '../views/chat_user_view.dart';
 
 class BusinessCom extends StatefulWidget {
@@ -24,10 +27,12 @@ class BusinessCom extends StatefulWidget {
 class _BusinessComState extends State<BusinessCom> {
   @override
   void initState() {
-    final userPro = Provider.of<UserProvider>(context, listen: false);
+    final userPro = Provider.of<CuUserProvider>(context, listen: false);
+    final taskPro = Provider.of<TaskProvider>(context, listen: false);
     User? cuUid = FirebaseAuth.instance.currentUser;
     if (cuUid != null) {
       userPro.loadUser(cuUid.uid);
+      taskPro.getSocialLinks();
     }
     super.initState();
   }
@@ -38,21 +43,38 @@ class _BusinessComState extends State<BusinessCom> {
       appBar: AppBar(
         title: const Text("Business"),
         actions: [
-          Consumer<UserProvider>(builder: (context, value, child) {
+          Consumer<CuUserProvider>(builder: (context, value, child) {
             if (value.user != null) {
               return InkWell(
                 onTap: () {
+                  final userPro =
+                      Provider.of<CuUserProvider>(context, listen: false);
+                  final taskPro =
+                      Provider.of<TaskProvider>(context, listen: false);
+                  User? cuUid = FirebaseAuth.instance.currentUser;
+                  if (cuUid != null) {
+                    userPro.loadUser(cuUid.uid);
+                    taskPro.getSocialLinks();
+                  }
                   Get.to(
                     () => UserProfile(
                       userModel: value.user!,
                     ),
                   );
                 },
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 18.0),
-                  child: Icon(
-                    Icons.person,
-                    size: 30,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: ClipOval(
+                    child: CachedNetworkImage(
+                      imageUrl: value.user!.profileUrl.toString(),
+                      placeholder: (context, url) =>
+                          AppUtils().waitLoading(color: Colors.black),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               );
@@ -67,7 +89,7 @@ class _BusinessComState extends State<BusinessCom> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const ConatinerWidget(),
+            const ContainerWidget(),
             SizedBox(height: Get.height * 0.01),
             const ChatView(),
             SizedBox(height: Get.height * 0.01),

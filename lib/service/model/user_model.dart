@@ -6,8 +6,12 @@ class UserModel {
   String? phoneNumber;
   String? profileUrl;
   String? name;
+  String? accountNumber;
   DateTime? createdAt;
   bool isDeleted;
+  bool paymentStatus;
+  int? balance;
+  int? coinBalance;
 
   UserModel({
     this.uid,
@@ -16,7 +20,11 @@ class UserModel {
     this.profileUrl,
     this.name,
     this.createdAt,
+    this.accountNumber,
     required this.isDeleted,
+    required this.paymentStatus,
+    this.balance,
+    this.coinBalance,
   });
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
@@ -27,6 +35,10 @@ class UserModel {
       name: map['name'] ?? '',
       createdAt: (map['createdAt'] as Timestamp).toDate(),
       isDeleted: map['isDeleted'],
+      paymentStatus: map['paymentStatus'],
+      balance: map['balance'] ?? 0,
+      coinBalance: map['coinBalance'] ?? 0,
+      accountNumber: map['accountNumber'] ?? "",
     );
   }
   Map<String, dynamic> toMap() {
@@ -38,6 +50,10 @@ class UserModel {
       'name': name,
       'createdAt': createdAt,
       'isDeleted': isDeleted,
+      'paymentStatus': paymentStatus,
+      'balance': balance,
+      'coinBalance': coinBalance,
+      'accountNumber': accountNumber,
     };
   }
 }

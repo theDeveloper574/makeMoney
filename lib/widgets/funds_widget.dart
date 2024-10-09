@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
+import 'package:makemoney/service/model/market_model.dart';
 
 class FundsWidget extends StatelessWidget {
-  const FundsWidget({super.key});
+  final CryptoCurrencyModel? model;
+  const FundsWidget({super.key, this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -25,20 +28,28 @@ class FundsWidget extends StatelessWidget {
                 // SizedBox(width: Get.width * 0.01),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 6.0),
-                  child: const CircleAvatar(
-                    child: Icon(Icons.currency_bitcoin),
+                  child: CircleAvatar(
+                    child: CachedNetworkImage(
+                      // height: 30,
+                      imageUrl: model!.image.toString(),
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
+                    ),
+                    // child: Image.network(model!.image.toString()),
                   ),
                 ),
-                const Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Bitcoin",
-                      style: TextStyle(
+                      model!.name!,
+                      style: const TextStyle(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Text("Btc"),
+                    Text(model!.symbol.toString()),
                   ],
                 ),
               ],
@@ -46,11 +57,11 @@ class FundsWidget extends StatelessWidget {
             SizedBox(height: Get.height * 0.007),
             Padding(
               padding: EdgeInsets.only(left: Get.width * 0.03),
-              child: const Text(
-                "\$23423",
-                style: TextStyle(
+              child: Text(
+                "\$${model!.currentPrice}",
+                style: const TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
               ),
             ),
@@ -59,20 +70,9 @@ class FundsWidget extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // SizedBox(width: Get.width * 0.07),
-                  const Text(
-                    "+\$34546",
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.red,
-                    ),
-                  ),
-                  SizedBox(
-                    width: Get.width * 0.01,
-                  ),
-                  const Text(
-                    "+\$0.097%",
-                    style: TextStyle(fontSize: 12, color: Colors.red),
+                  Text(
+                    "\$${model!.low24}",
+                    style: const TextStyle(fontSize: 12, color: Colors.red),
                   ),
                 ],
               ),
