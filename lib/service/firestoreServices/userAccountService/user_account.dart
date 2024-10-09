@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:makemoney/service/model/user_model.dart';
 
 class UserAccounts {
@@ -6,35 +7,81 @@ class UserAccounts {
 
   Stream<List<UserModel>> userCount() {
     return _db
-        .collection('users')
+        // .collection('users')
+        .collection('futureInvestUsers')
         .where('isDeleted', isEqualTo: false)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((e) {
-        return UserModel.fromMap(e.data() as Map<String, dynamic>);
+        return UserModel.fromMap(e.data());
       }).toList();
     });
   }
 
   Future<List<UserModel>> getUsers() async {
     try {
-      // Fetch users where 'isDeleted' is false
       var snapshot = await FirebaseFirestore.instance
-          .collection('users')
+          .collection('futureInvestUsers')
           .where('isDeleted', isEqualTo: false)
+          .orderBy('createdAt', descending: true)
+          .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
           .get();
-      // Process each document and map to UserModel or perform your logic here
       List<UserModel> users = snapshot.docs.map((doc) {
-        return UserModel.fromMap(doc.data() as Map<String, dynamic>);
+        return UserModel.fromMap(doc.data());
       }).toList();
       return users;
-      // Do something with the list of users, e.g., print or update the state
-      // print('Users: ${users.length}');
-      // You can perform any other actions with the users list here.
     } catch (e) {
       // Handle any errors
-      print('Error fetching users: $e');
+      if (kDebugMode) {
+        print('Error fetching users: $e');
+      }
     }
     return [];
+  }
+
+  Future<List<UserModel>> getUsersInvest() async {
+    try {
+      var snapshot = await FirebaseFirestore.instance
+          .collection('futureInvestUsers')
+          .where('isDeleted', isEqualTo: false)
+          .orderBy('createdAt', descending: true)
+          .where('paymentStatus', isEqualTo: true)
+          .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+          .get();
+      List<UserModel> users = snapshot.docs.map((doc) {
+        return UserModel.fromMap(doc.data());
+      }).toList();
+      return users;
+    } catch (e) {
+      // Handle any errors
+      if (kDebugMode) {
+        print('Error fetching users: $e');
+      }
+    }
+    return [];
+  }
+
+  ///data for admin
+  Stream<List<UserModel>> getUserSnpAdmin() {
+    return _db
+        // .collection('users')
+        .collection('futureInvestUsers')
+        .orderBy('createdAt', descending: true)
+        .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((e) {
+        return UserModel.fromMap(e.data());
+      }).toList();
+    });
+  }
+
+  ///try to update some values
+  Future<void> deleteUser(UserModel user) async {
+    // await _db.collection('users').doc(user.uid).update(user.toMap());
+    await _db
+        .collection('futureInvestUsers')
+        .doc(user.uid)
+        .update(user.toMap());
   }
 }

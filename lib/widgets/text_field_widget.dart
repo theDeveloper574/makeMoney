@@ -11,6 +11,9 @@ class TextFieldWidget extends StatelessWidget {
   final bool? isShow;
   final Widget? suffixWidget;
   final Widget? prefixIcon;
+  final double? left;
+  final double? right;
+  final double? top;
 
   const TextFieldWidget({
     super.key,
@@ -24,15 +27,18 @@ class TextFieldWidget extends StatelessWidget {
     this.isShow,
     this.suffixWidget,
     this.prefixIcon,
+    this.left,
+    this.right,
+    this.top,
   });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 15.0,
-        right: 15.0,
-        top: 15,
+      padding: EdgeInsets.only(
+        left: left ?? 15.0,
+        right: right ?? 15.0,
+        top: top ?? 15,
         bottom: 0,
       ),
       child: TextFormField(

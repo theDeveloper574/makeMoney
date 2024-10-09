@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 class AppUtils {
   Future<void> toast(String msg) async {
@@ -21,7 +23,9 @@ class AppUtils {
     return const SizedBox(
       height: 2,
       width: 2,
-      child: Center(child: CircularProgressIndicator(color: Colors.blue)),
+      child: Center(
+        child: CircularProgressIndicator(color: Colors.blue),
+      ),
     );
   }
 
@@ -41,11 +45,13 @@ class AppUtils {
     return 10000 + random.nextInt(90000); // 10000 + (0 to 89999)
   }
 
-  Widget waitLoading() {
-    return const SizedBox(
+  Widget waitLoading({Color? color}) {
+    return SizedBox(
       height: 24,
       width: 24,
-      child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(
+        color: color ?? Colors.white,
+      ),
     );
   }
 
@@ -60,6 +66,85 @@ class AppUtils {
         height: 40,
         fit: BoxFit.cover,
       ),
+    );
+  }
+
+  Future<void> copyText(String text) async {
+    await Clipboard.setData(
+      ClipboardData(text: text),
+    );
+    Get.snackbar(
+      'Future Invest',
+      'متن کلپ بورڈ پر کاپی ہو گیا۔',
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.black,
+      colorText: Colors.white,
+    );
+  }
+
+  SnackbarController snackBarUtil(String message) {
+    return Get.snackbar(
+      'Future Invest',
+      message,
+      snackPosition: SnackPosition.TOP,
+      backgroundColor: Colors.black,
+      colorText: Colors.white,
+    );
+  }
+
+  // Function to show the dialog
+  void exitDialog(BuildContext context, Function() onLogout) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Logout"),
+          content: const Text("Are you sure you want to logout?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(); // Close the dialog without any action
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: onLogout,
+              child: const Text("Logout"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void customDialog({
+    required BuildContext context,
+    required Function() onDone,
+    required String title,
+    required String des,
+    required String onDoneTxt,
+  }) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text("Are you sure you want to $des?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: onDone,
+              child: Text(onDoneTxt),
+            ),
+          ],
+        );
+      },
     );
   }
 }
