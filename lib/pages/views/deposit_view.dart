@@ -53,7 +53,7 @@ class _DepositViewState extends State<DepositView> {
                   // Call this to fetch the latest deposits
                   await depositPro.fetchDeposits();
                   final lastDeposit = await depositPro
-                      .getLastUserDeposit(widget.userModel!.uid!);
+                      .getLastApprovedUserDeposit(widget.userModel!.uid!);
                   if (lastDeposit != null) {
                     if (lastDeposit.isApproved == true) {
                       // Navigate to the DepositMoneyCom screen
@@ -66,7 +66,6 @@ class _DepositViewState extends State<DepositView> {
                           "Please wait for your last deposit to be approved.\nبراہ کرم اپنے آخری ڈپازٹ کے منظور ہونے کا انتظار کریں۔");
                     }
                   } else {
-                    // If there are no deposits, proceed with the new deposit
                     Get.to(
                       () => DepositMoneyCom(
                         userModel: widget.userModel,

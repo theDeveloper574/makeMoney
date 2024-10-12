@@ -124,13 +124,29 @@ class AppUtils {
     required String title,
     required String des,
     required String onDoneTxt,
+    TextEditingController? controller,
+    bool isTextField = false,
   }) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Text("Are you sure you want to $des?"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Are you sure you want to $des?"),
+              if (isTextField) const SizedBox(height: 10),
+              if (isTextField)
+                TextField(
+                  controller: controller, // Attach controller
+                  keyboardType: TextInputType.number, // Accept only numbers
+                  decoration: const InputDecoration(
+                    labelText: "Enter Deposit Amount",
+                  ),
+                ),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -139,7 +155,16 @@ class AppUtils {
               child: const Text("Cancel"),
             ),
             TextButton(
-              onPressed: onDone,
+              //   onPressed: onDone,
+              onPressed: () {
+                if (isTextField &&
+                    (controller == null || controller.text.isEmpty)) {
+                  AppUtils().toast(
+                      "Please enter an amount"); // Show message if no amount entered
+                } else {
+                  onDone(); // Call onDone only if valid input
+                }
+              },
               child: Text(onDoneTxt),
             ),
           ],

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:makemoney/service/firestoreServices/userService/user_service.dart';
@@ -99,4 +100,75 @@ class CuUserProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  final _db = FirebaseFirestore.instance;
+  Future<void> addToUserBalance({
+    required String docId,
+    required int depositAmount,
+  }) async {
+    // Get the current user balance and coin balance
+    final DocumentSnapshot userDoc =
+        await _db.collection('futureInvestUsers').doc(docId).get();
+
+    if (userDoc.exists) {
+      int currentBalance = userDoc['balance'] ?? 0;
+      int currentCoinBalance = userDoc['coinBalance'] ?? 0;
+
+      // Add the new deposit amount to the current balance and coin balance
+      await _db.collection('futureInvestUsers').doc(docId).update({
+        'paymentStatus': true,
+        'balance': currentBalance + depositAmount,
+        'coinBalance': currentCoinBalance + depositAmount,
+      });
+    } else {
+      throw Exception("User document does not exist.");
+    }
+  }
+
+  Future<void> subtractFromUserBalance({
+    required String docId,
+    required int withdrawAmount,
+  }) async {
+    // Get the current user balance and coin balance
+    final DocumentSnapshot userDoc =
+        await _db.collection('futureInvestUsers').doc(docId).get();
+
+    if (userDoc.exists) {
+      int currentBalance = userDoc['balance'] ?? 0;
+      int currentCoinBalance = userDoc['coinBalance'] ?? 0;
+
+      // Ensure there is enough balance for the withdrawal
+      if (currentBalance >= withdrawAmount &&
+          currentCoinBalance >= withdrawAmount) {
+        // Subtract the withdraw amount from the current balance and coin balance
+        await _db.collection('futureInvestUsers').doc(docId).update({
+          'balance': currentBalance - withdrawAmount,
+          'coinBalance': currentCoinBalance - withdrawAmount,
+        });
+      } else {
+        throw Exception("Insufficient balance for withdrawal.");
+      }
+    } else {
+      throw Exception("User document does not exist.");
+    }
+  }
+  //final updateBalance = Provider.of<CuUserProvider>(context, listen: false);
+// final withdrawPro = Provider.of<WithdrawProvider>(context, listen: false);
+//
+// AppUtils().customDialog(
+//   context: context,
+//   onDone: () async {
+//     // Subtract the withdrawal amount from user's balance
+//     await updateBalance.subtractFromUserBalance(
+//       docId: transaction.uid!,
+//       withdrawAmount: transaction.withdrawAmount!,
+//     );
+//     await withdrawPro.updateWithdrawForAdmin(transaction, true);
+//     AppUtils().toast('User Withdrawal Accepted.');
+//     Get.back();
+//   },
+//   title: "Withdraw Payment",
+//   des: "approve the withdrawal",
+//   onDoneTxt: 'yes',
+// );
 }

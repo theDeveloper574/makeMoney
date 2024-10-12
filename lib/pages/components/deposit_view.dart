@@ -58,7 +58,7 @@ class _DepositMoneyComState extends State<DepositMoneyCom> {
                             fontSize: 14, fontWeight: FontWeight.w800),
                       ),
                       const Text(
-                        "Muhammad Imran",
+                        "Nelam Shabir",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w800),
                       ),
@@ -66,7 +66,7 @@ class _DepositMoneyComState extends State<DepositMoneyCom> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           const Text(
-                            "0300 5001575",
+                            "0308 2347242",
                             style: TextStyle(
                                 fontSize: 22, fontWeight: FontWeight.w800),
                           ),
@@ -74,7 +74,7 @@ class _DepositMoneyComState extends State<DepositMoneyCom> {
                           InkWell(
                             onTap: () {
                               Clipboard.setData(
-                                const ClipboardData(text: '03005001575'),
+                                const ClipboardData(text: '03082347242'),
                               );
                               AppUtils().toast('نمبر کاپی ہو گیا ہے');
                             },
@@ -171,7 +171,7 @@ class _DepositMoneyComState extends State<DepositMoneyCom> {
     );
   }
 
-  final String phoneNumber = "923007792595"; // Example: Pakistani phone number
+  final String phoneNumber = "923091429758";
 
   Future<void> openWhatsApp() async {
     final whatsappUrl = "https://wa.me/$phoneNumber";

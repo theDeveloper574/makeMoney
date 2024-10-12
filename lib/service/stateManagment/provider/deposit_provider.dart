@@ -63,17 +63,41 @@ class DepositProvider with ChangeNotifier {
   }
 
   // Get the user's last deposit and check approval status
-  Future<DepositModel?> getLastUserDeposit(String uid) async {
+  // Future<DepositModel?> getLastUserDeposit(String uid) async {
+  //   try {
+  //     final deposits = await _depositService.getDeposits();
+  //     final userDeposits =
+  //         deposits.where((deposit) => deposit.uid == uid).toList();
+  //     if (userDeposits.isNotEmpty) {
+  //       return userDeposits.last;
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print('Error fetching last user deposit: $e');
+  //     }
+  //   }
+  //   return null;
+  // }
+  Future<DepositModel?> getLastApprovedUserDeposit(String uid) async {
     try {
       final deposits = await _depositService.getDeposits();
-      final userDeposits =
-          deposits.where((deposit) => deposit.uid == uid).toList();
-      if (userDeposits.isNotEmpty) {
-        return userDeposits.last;
+
+      // Filter only approved deposits for the user
+      final userApprovedDeposits = deposits
+          .where((deposit) => deposit.uid == uid && deposit.isApproved == false)
+          .toList();
+
+      // Sort deposits by createdAt in descending order (latest first)
+      userApprovedDeposits.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+
+      // Return the latest approved deposit
+      if (userApprovedDeposits.isNotEmpty) {
+        return userApprovedDeposits
+            .first; // Fetches the most recent approved deposit
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error fetching last user deposit: $e');
+        print('Error fetching last approved user deposit: $e');
       }
     }
     return null;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:makemoney/core/commen/app_utils.dart';
 import 'package:makemoney/service/model/deposit_model.dart';
 import 'package:makemoney/widgets/listtile_shimmer_widget.dart';
@@ -46,7 +47,8 @@ class TransactionView extends StatelessWidget {
 // A custom widget for displaying each transaction as a card
 class TransactionCard extends StatelessWidget {
   final DepositModel transaction;
-  const TransactionCard({required this.transaction, super.key});
+  TransactionCard({required this.transaction, super.key});
+  final amountCon = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -67,7 +69,12 @@ class TransactionCard extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Deposit Amount: Rs. ${transaction.depositAmount}',
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                decoration: transaction.isApproved!
+                    ? TextDecoration.lineThrough
+                    : TextDecoration.none,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -107,15 +114,49 @@ class TransactionCard extends StatelessWidget {
                 if (transaction.isApproved!) {
                 } else {
                   AppUtils().customDialog(
+                    controller: amountCon,
+                    isTextField: true,
                     context: context,
                     onDone: () async {
-                      await updateBalance.updateCu(
-                        docId: transaction.uid!,
-                        balance: transaction.depositAmount!,
-                        coinBalance: transaction.depositAmount!,
-                      );
-                      await depositPro.updateDepositForAdmin(transaction, true);
-                      AppUtils().toast('User Deposit Accepted.');
+                      if (amountCon.text.isNotEmpty) {
+                        double enteredAmount = double.parse(
+                            amountCon.text); // Parse the entered amount
+                        int depositAmount = transaction
+                            .depositAmount!; // Get the total deposit amount
+
+                        if (enteredAmount > depositAmount) {
+                          AppUtils().toast(
+                              "The entered amount cannot be greater than the deposit amount of $depositAmount");
+                        } else {
+                          await updateBalance.addToUserBalance(
+                            docId: transaction.uid!,
+                            depositAmount: enteredAmount
+                                .toInt(), // Convert entered amount to int
+                          );
+                          await depositPro.updateDepositForAdmin(
+                              transaction, true);
+                          AppUtils().toast('User Deposit Accepted.');
+                          Get.back(); // Close dialog after updating
+                        }
+                      } else {
+                        AppUtils().toast("Please enter a valid amount");
+                      }
+
+                      // transaction.depositAmount
+                      // if (amountCon.text.isNotEmpty) {
+                      //   await updateBalance.addToUserBalance(
+                      //     docId: transaction.uid!,
+                      //     depositAmount:
+                      //         int.parse(amountCon.text), // Parse the input
+                      //   );
+                      //   await depositPro.updateDepositForAdmin(
+                      //       transaction, true);
+                      //   AppUtils().toast('User Deposit Accepted.');
+                      //   Get.back(); // Close dialog after updating
+                      // } else {
+                      //   AppUtils().toast(
+                      //       "Please enter a valid amount"); // Notify if input is empty
+                      // }
                     },
                     title: "Deposit Payment",
                     des: "accept the deposit",
@@ -140,3 +181,13 @@ class TransactionCard extends StatelessWidget {
     );
   }
 }
+
+// onDone: () async {
+//   await updateBalance.addToUserBalance(
+//     docId: transaction.uid!,
+//     depositAmount: transaction.depositAmount!,
+//   );
+//   await depositPro.updateDepositForAdmin(transaction, true);
+//   AppUtils().toast('User Deposit Accepted.');
+//   Get.back();
+// },

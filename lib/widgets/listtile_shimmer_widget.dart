@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class ListTileShimmerWidget extends StatelessWidget {
-  const ListTileShimmerWidget({super.key});
+  final int? count;
+  final bool isLoad;
+  const ListTileShimmerWidget({
+    super.key,
+    this.count,
+    this.isLoad = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 10, // Number of shimmer items to display
+      shrinkWrap: isLoad,
+      itemCount: count ?? 10, // Number of shimmer items to display
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
           baseColor: Colors.grey[300]!,

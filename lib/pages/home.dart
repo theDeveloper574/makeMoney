@@ -12,6 +12,7 @@ import 'package:video_player/video_player.dart';
 import '../adminPages/admin_view.dart';
 import '../service/stateManagment/provider/cu_user_provider.dart';
 import '../service/stateManagment/provider/fetch_task_provider.dart';
+import '../widgets/binance_ad_widget.dart';
 import 'components/quran_component.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     _controller.addListener(() {
       setState(() {});
     });
+
     User? cuUid = FirebaseAuth.instance.currentUser;
     if (cuUid != null) {
       userPro.loadUser(cuUid.uid);
@@ -191,52 +193,28 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
               SizedBox(height: Get.height * 0.02),
-              Container(
-                decoration: BoxDecoration(
-                  color: AppColors.blurColor,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                width: double.infinity,
-                child: const Center(
-                  child: Column(
-                    children: [
-                      Text(
-                        "Coming soon",
-                        style: TextStyle(
-                          fontSize: 30,
-                        ),
-                      ),
-                      Text(
-                        "جلد آرہا ہے۔",
-                        style: TextStyle(
-                          fontSize: 22,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              const BinanceAdWidget(),
               SizedBox(height: Get.height * 0.01),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: Stack(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      height: Get.height / 3.8,
-                      child: _controller.value.isInitialized
-                          ? AspectRatio(
-                              aspectRatio: _controller.value.aspectRatio,
-                              child: VideoPlayer(_controller),
-                            )
-                          : const Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Container(
+                        decoration: const BoxDecoration(color: Colors.green),
+                        height: Get.height / 3.8,
+                        child: _controller.value.isInitialized
+                            ? AspectRatio(
+                                aspectRatio: _controller.value.aspectRatio,
+                                child: VideoPlayer(_controller),
+                              )
+                            : const Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
+                      ),
                     ),
                     Positioned(
                       bottom: 0,

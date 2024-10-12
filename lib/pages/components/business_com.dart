@@ -10,11 +10,11 @@ import 'package:makemoney/pages/views/chat_view.dart';
 import 'package:makemoney/pages/views/cu_user_profile_view.dart';
 import 'package:makemoney/service/stateManagment/provider/cu_user_provider.dart';
 import 'package:makemoney/widgets/boxes.dart';
-import 'package:makemoney/widgets/container_widget.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/commen/app_utils.dart';
 import '../../service/stateManagment/provider/fetch_task_provider.dart';
+import '../../widgets/binance_ad_widget.dart';
 import '../views/chat_user_view.dart';
 
 class BusinessCom extends StatefulWidget {
@@ -89,7 +89,7 @@ class _BusinessComState extends State<BusinessCom> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const ContainerWidget(),
+            const BinanceAdWidget(),
             SizedBox(height: Get.height * 0.01),
             const ChatView(),
             SizedBox(height: Get.height * 0.01),

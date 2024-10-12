@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:makemoney/core/commen/app_utils.dart';
-import 'package:makemoney/core/commen/constants.dart';
 import 'package:makemoney/pages/views/withdraw_view.dart';
 import 'package:makemoney/service/model/user_model.dart';
 import 'package:makemoney/service/stateManagment/provider/fetch_task_provider.dart';
@@ -11,9 +10,12 @@ import 'package:makemoney/service/stateManagment/provider/market_provider.dart';
 import 'package:makemoney/widgets/funds_widget.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/commen/constants.dart';
 import '../../service/firestoreServices/social_service.dart';
 import '../../service/stateManagment/provider/cu_user_provider.dart';
+import '../../service/stateManagment/provider/withdraw_provider.dart';
 import '../../widgets/container_widget.dart';
+import '../../widgets/listtile_shimmer_widget.dart';
 import '../../widgets/my_coin_widget.dart';
 import '../../widgets/read_user_widgdraw_notification.dart';
 import '../../widgets/shimmer_effect_widget.dart';
@@ -105,128 +107,185 @@ class _UserProfileState extends State<UserProfile> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: Get.height * 0.02),
-              Card(
-                shadowColor: Colors.grey.withOpacity(0.4),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8), // <-- Radius
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      SizedBox(height: Get.height * 0.01),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Consumer<CuUserProvider>(builder: (context, value, child) {
+                if (value.user != null) {
+                  return Card(
+                    shadowColor: Colors.grey.withOpacity(0.4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8), // <-- Radius
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
                         children: [
-                          const Text("Account balance"),
+                          SizedBox(height: Get.height * 0.01),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
-                                "(1.20x )",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
+                              const Text("Account balance:"),
+                              Row(
+                                children: [
+                                  const Text(
+                                    "(1.20x )",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Image.asset(LocalImg.dLogo, height: 30),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    value.user!.balance.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(height: Get.height * 0.01),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
                               Image.asset(LocalImg.dLogo, height: 30),
                               const SizedBox(width: 8),
                               Text(
-                                widget.userModel.balance.toString(),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w800,
+                                value.user!.coinBalance.toString(),
+                                style: const TextStyle(fontSize: 22),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: Get.height * 0.01),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (widget.userModel.uid ==
+                                        '2hMNPs27hlTijhFO6DcMM9SNQmy2') {
+                                      AppUtils().toast(
+                                        "NA KAR TU ADMIN HAI.",
+                                      );
+                                    } else {
+                                      final depositPro =
+                                          Provider.of<WithdrawProvider>(context,
+                                              listen: false);
+                                      // Call this to fetch the latest deposits
+                                      await depositPro.fetchDeposits();
+                                      final lastDeposit = await depositPro
+                                          .getLastApprovedUserWithdraw(
+                                              widget.userModel.uid!);
+                                      if (lastDeposit != null) {
+                                        if (lastDeposit.isApproved == true) {
+                                          // Navigate to the DepositMoneyCom screen
+                                          Get.to(
+                                            () => WithdrawView(
+                                              userModel: widget.userModel,
+                                            ),
+                                          );
+                                        } else {
+                                          // Show toast if the last deposit is not approved
+                                          AppUtils().toast(
+                                              "Please wait for your last withdraw to be approved.\nبراہ کرم اپنے آخری ڈپازٹ کے منظور ہونے کا انتظار کریں۔");
+                                        }
+                                      } else {
+                                        Get.to(
+                                          () => WithdrawView(
+                                            userModel: widget.userModel,
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  },
+                                  child: Card(
+                                    color: Colors.greenAccent,
+                                    shadowColor: Colors.grey.withOpacity(0.4),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            20) // <-- Radius
+                                        ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0,
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(height: Get.height * 0.01),
+                                          const Icon(Icons.play_arrow),
+                                          SizedBox(
+                                            width: Get.width * 0.01,
+                                          ),
+                                          const Text("Withdraw"),
+                                          SizedBox(height: Get.height * 0.02),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    if (widget.userModel.uid ==
+                                        '2hMNPs27hlTijhFO6DcMM9SNQmy2') {
+                                      AppUtils().toast("NA KAR TU ADMIN HAI.");
+                                    } else {
+                                      Get.to(
+                                        () => DepositView(
+                                          userModel: widget.userModel,
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: Card(
+                                    color: Colors.greenAccent,
+                                    shadowColor: Colors.grey.withOpacity(0.4),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          20), // <-- Radius
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          SizedBox(height: Get.height * 0.01),
+                                          const Icon(Icons.stop),
+                                          SizedBox(
+                                            width: Get.width * 0.01,
+                                          ),
+                                          const Text("Deposit"),
+                                          SizedBox(height: Get.height * 0.02),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ],
-                          )
+                          ),
+                          SizedBox(height: Get.height * 0.01),
                         ],
                       ),
-                      SizedBox(height: Get.height * 0.01),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            widget.userModel.balance.toString(),
-                            style: const TextStyle(fontSize: 22),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: Get.height * 0.01),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Get.to(() => const WithdrawView());
-                              },
-                              child: Card(
-                                color: Colors.greenAccent,
-                                shadowColor: Colors.grey.withOpacity(0.4),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(20) // <-- Radius
-                                    ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0,
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(height: Get.height * 0.01),
-                                      const Icon(Icons.play_arrow),
-                                      SizedBox(
-                                        width: Get.width * 0.01,
-                                      ),
-                                      const Text("Withdraw"),
-                                      SizedBox(height: Get.height * 0.02),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Get.to(() =>
-                                    DepositView(userModel: widget.userModel));
-                              },
-                              child: Card(
-                                color: Colors.greenAccent,
-                                shadowColor: Colors.grey.withOpacity(0.4),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(20), // <-- Radius
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      SizedBox(height: Get.height * 0.01),
-                                      const Icon(Icons.stop),
-                                      SizedBox(
-                                        width: Get.width * 0.01,
-                                      ),
-                                      const Text("Deposit"),
-                                      SizedBox(height: Get.height * 0.02),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: Get.height * 0.01),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
+                  );
+                  // return const Center(
+                  //   child: Text("Please Login to conyinue"),
+                  // );
+                } else {
+                  return const Center(
+                    child: Text("Please Login to continue"),
+                  );
+                }
+              }),
 
               ///show analytics data
               SizedBox(height: Get.height * 0.01),
@@ -263,7 +322,11 @@ class _UserProfileState extends State<UserProfile> {
               Consumer<TaskProvider>(
                 builder: (context, provider, child) {
                   if (provider.isLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(
+                        child: ListTileShimmerWidget(
+                      count: 4,
+                      isLoad: true,
+                    ));
                   }
                   if (provider.socialLinks.isEmpty) {
                     return const Center(child: Text('No social links found'));
@@ -298,45 +361,6 @@ class _UserProfileState extends State<UserProfile> {
                   );
                 },
               ),
-              // ContainerWidget(
-              //   onTap: () async {
-              //     await SocialService().launchSocialLink('tiktok');
-              //   },
-              //   textColor: Colors.white,
-              //   bgColor: const Color(0xffff0050),
-              //   task: "Tiktok",
-              //   urdu: 'Task',
-              // ),
-              // SizedBox(height: Get.height * 0.02),
-              // ContainerWidget(
-              //   onTap: () async {
-              //     await SocialService().launchSocialLink('facebook');
-              //   },
-              //   textColor: Colors.white,
-              //   bgColor: const Color(0xff4267B2),
-              //   task: "Facebook",
-              //   urdu: 'Task',
-              // ),
-              // SizedBox(height: Get.height * 0.02),
-              // ContainerWidget(
-              //   onTap: () async {
-              //     await SocialService().launchSocialLink('youtube');
-              //   },
-              //   textColor: Colors.white,
-              //   bgColor: const Color(0xffFF0000),
-              //   task: "Youtube",
-              //   urdu: 'Task',
-              // ),
-              // SizedBox(height: Get.height * 0.02),
-              // ContainerWidget(
-              //   onTap: () async {
-              //     await SocialService().launchSocialLink('instagram');
-              //   },
-              //   textColor: Colors.white,
-              //   bgColor: const Color(0xffE1306C),
-              //   task: "Instagram",
-              //   urdu: 'Task',
-              // ),
               SizedBox(height: Get.height * 0.02),
             ],
           ),

@@ -10,6 +10,7 @@ import 'adminView/buy_sell_list_view.dart';
 import 'adminView/mobile_app_list_view.dart';
 import 'adminView/task_dialog_view.dart';
 import 'adminView/transection_view.dart';
+import 'adminView/withdraw_view.dart';
 
 class AdminView extends StatefulWidget {
   const AdminView({super.key});
@@ -125,7 +126,7 @@ class _AdminViewState extends State<AdminView> {
                   bgColor: Colors.black,
                   text: "Withdraw List",
                   onPressed: () {
-                    Get.to(() => const CourseRequestAdminWidget());
+                    Get.to(() => const WithdrawAdminView());
                   },
                 ),
                 AdminButton(

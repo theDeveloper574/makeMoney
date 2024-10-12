@@ -66,8 +66,9 @@ class UserAccounts {
     return _db
         // .collection('users')
         .collection('futureInvestUsers')
-        .orderBy('createdAt', descending: true)
         .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+        .orderBy('uid')
+        .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((e) {

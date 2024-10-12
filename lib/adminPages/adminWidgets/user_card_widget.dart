@@ -87,16 +87,23 @@ class UserCard extends StatelessWidget {
                 ),
               ],
             ),
-            const Row(
+            Row(
               children: [
-                Text("Balance: "),
-                Text("120"),
+                const Text("Balance: "),
+                Text(user.balance.toString()),
               ],
             ),
-            const Row(
+            Row(
               children: [
-                Text("Payment Status: "),
-                Text("pending"),
+                const Text("Payment Status: "),
+                Text(
+                  user.paymentStatus ? 'Accepted' : "Pending",
+                  style: TextStyle(
+                    color: user.paymentStatus ? Colors.black : Colors.red,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ],
             )
           ],

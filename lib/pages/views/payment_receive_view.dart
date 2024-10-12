@@ -46,7 +46,7 @@ class PaymentReceiveViewState extends State<PaymentReceiveView> {
         stream: FirebaseFirestore.instance
             .collection('widrawNotification')
             .where('uid', isEqualTo: currentUserId)
-            .orderBy('createdAt', descending: false)
+            .orderBy('createdAt', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
