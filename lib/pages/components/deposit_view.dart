@@ -58,7 +58,7 @@ class _DepositMoneyComState extends State<DepositMoneyCom> {
                             fontSize: 14, fontWeight: FontWeight.w800),
                       ),
                       const Text(
-                        "Nelam Shabir",
+                        "NEELAM SHABIR",
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.w800),
                       ),
