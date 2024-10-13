@@ -2,11 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:makemoney/pages/components/deposit_view.dart';
 import 'package:makemoney/service/model/user_model.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
-import '../../core/commen/app_utils.dart';
-import '../../service/stateManagment/provider/deposit_provider.dart';
 import '../components/deposit_video.dart';
 
 class DepositView extends StatefulWidget {
@@ -48,30 +45,35 @@ class _DepositViewState extends State<DepositView> {
             children: [
               InkWell(
                 onTap: () async {
-                  final depositPro =
-                      Provider.of<DepositProvider>(context, listen: false);
+                  // final depositPro =
+                  //     Provider.of<DepositProvider>(context, listen: false);
+                  Get.to(
+                    () => DepositMoneyCom(
+                      userModel: widget.userModel,
+                    ),
+                  );
                   // Call this to fetch the latest deposits
-                  await depositPro.fetchDeposits();
-                  final lastDeposit = await depositPro
-                      .getLastApprovedUserDeposit(widget.userModel!.uid!);
-                  if (lastDeposit != null) {
-                    if (lastDeposit.isApproved == true) {
-                      // Navigate to the DepositMoneyCom screen
-                      Get.to(
-                        () => DepositMoneyCom(userModel: widget.userModel),
-                      );
-                    } else {
-                      // Show toast if the last deposit is not approved
-                      AppUtils().toast(
-                          "Please wait for your last deposit to be approved.\nبراہ کرم اپنے آخری ڈپازٹ کے منظور ہونے کا انتظار کریں۔");
-                    }
-                  } else {
-                    Get.to(
-                      () => DepositMoneyCom(
-                        userModel: widget.userModel,
-                      ),
-                    );
-                  }
+                  // await depositPro.fetchDeposits();
+                  // final lastDeposit = await depositPro
+                  //     .getLastApprovedUserDeposit(widget.userModel!.uid!);
+                  // if (lastDeposit != null) {
+                  //   if (lastDeposit.isApproved == true) {
+                  //     // Navigate to the DepositMoneyCom screen
+                  //     Get.to(
+                  //       () => DepositMoneyCom(userModel: widget.userModel),
+                  //     );
+                  //   } else {
+                  //     // Show toast if the last deposit is not approved
+                  //     AppUtils().toast(
+                  //         "Please wait for your last deposit to be approved.\nبراہ کرم اپنے آخری ڈپازٹ کے منظور ہونے کا انتظار کریں۔");
+                  //   }
+                  // } else {
+                  //   Get.to(
+                  //     () => DepositMoneyCom(
+                  //       userModel: widget.userModel,
+                  //     ),
+                  //   );
+                  // }
                 },
                 child: const Card(
                   color: Colors.green,

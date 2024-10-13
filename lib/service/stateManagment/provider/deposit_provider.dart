@@ -25,6 +25,10 @@ class DepositProvider with ChangeNotifier {
     return _depositService.getDeposit();
   }
 
+  Stream<List<DepositModel>> getDepositStrFal() {
+    return _depositService.getDepositFalse();
+  }
+
   Stream<List<DepositModel>> getStrAdmin() {
     return _depositService.getDeposit();
   }

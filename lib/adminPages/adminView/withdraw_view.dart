@@ -126,8 +126,8 @@ class WithdrawCard extends StatelessWidget {
                     context: context,
                     onDone: () async {
                       if (withCon.text.isNotEmpty) {
-                        double enteredAmount = double.parse(
-                            withCon.text); // Parse the entered amount
+                        int enteredAmount =
+                            int.parse(withCon.text); // Parse the entered amount
                         int depositAmount = withdraw.withdrawAmount!;
                         if (enteredAmount > depositAmount) {
                           AppUtils().toast(
@@ -135,11 +135,16 @@ class WithdrawCard extends StatelessWidget {
                         } else {
                           await WithdrawService().withdrawNotification(
                             uid: withdraw.uid!,
-                            // amount: withdraw.withdrawAmount.toString(),
                             amount: enteredAmount.toString(),
                           );
+                          await depositPro.subtractFromUserBalance(
+                            docId: withdraw.uid!,
+                            withdrawAmount: enteredAmount,
+                          );
                           await depositPro.updateDepositForAdmin(
-                              withdraw, true);
+                            withdraw,
+                            true,
+                          );
                           Get.back();
                           AppUtils().toast('User Withdraw Accepted.');
                         }

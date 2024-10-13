@@ -19,12 +19,15 @@ import '../../widgets/text_field_widget.dart';
 
 class CrateUserAccount extends StatelessWidget {
   CrateUserAccount({super.key});
+
   final nameCon = TextEditingController();
 
   final phoneCon = TextEditingController();
 
   final cityCon = TextEditingController();
+
   final accountCon = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final phonePro = Provider.of<UserAccount>(listen: false, context);
@@ -62,6 +65,7 @@ class CrateUserAccount extends StatelessWidget {
                   "یہ اکاؤنٹ نمبر تبدیل نہیں کیا جا سکتا، براہ کرم اسے دو بار چیک کریں۔"),
               TextFieldWidget(
                 maxLen: 11,
+                keyboardType: TextInputType.number,
                 controller: accountCon,
                 hintText: "جاز کیش / ایزی پیسہ نمبر۔",
               ),
@@ -114,6 +118,8 @@ class CrateUserAccount extends StatelessWidget {
                       isDeleted: false,
                       paymentStatus: false,
                       balance: 0,
+                      email: null,
+                      password: null,
                       coinBalance: 0,
                       accountNumber: accountCon.text,
                     );

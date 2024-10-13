@@ -56,6 +56,10 @@ class UserAccountProvider extends ChangeNotifier {
     return userAccounts.getUserSnpAdmin();
   }
 
+  Stream<List<UserModel>> loadUserAdminFal() {
+    return userAccounts.getUserSnpAdminFalse();
+  }
+
   ///try to delete the user
   Future<void> deleteUsr(UserModel user, bool value) async {
     user.isDeleted = value;

@@ -154,10 +154,7 @@ class _WithdrawViewState extends State<WithdrawView> {
       docId: docId, // Unique document ID for the transaction
     );
     // Add the withdrawal request to the database
-    await withdrawPro.subtractFromUserBalance(
-      docId: widget.userModel!.uid!,
-      withdrawAmount: withdrawAmount!,
-    );
+
     await userPro.loadUser(widget.userModel!.uid!);
     await withdrawPro.addDeposit(model);
     // Hide the loading overlay once the request is done

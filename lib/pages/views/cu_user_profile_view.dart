@@ -13,7 +13,6 @@ import 'package:provider/provider.dart';
 import '../../core/commen/constants.dart';
 import '../../service/firestoreServices/social_service.dart';
 import '../../service/stateManagment/provider/cu_user_provider.dart';
-import '../../service/stateManagment/provider/withdraw_provider.dart';
 import '../../widgets/container_widget.dart';
 import '../../widgets/listtile_shimmer_widget.dart';
 import '../../widgets/my_coin_widget.dart';
@@ -171,34 +170,39 @@ class _UserProfileState extends State<UserProfile> {
                                         "NA KAR TU ADMIN HAI.",
                                       );
                                     } else {
-                                      final depositPro =
-                                          Provider.of<WithdrawProvider>(context,
-                                              listen: false);
-                                      // Call this to fetch the latest deposits
-                                      await depositPro.fetchDeposits();
-                                      final lastDeposit = await depositPro
-                                          .getLastApprovedUserWithdraw(
-                                              widget.userModel.uid!);
-                                      if (lastDeposit != null) {
-                                        if (lastDeposit.isApproved == true) {
-                                          // Navigate to the DepositMoneyCom screen
-                                          Get.to(
-                                            () => WithdrawView(
-                                              userModel: widget.userModel,
-                                            ),
-                                          );
-                                        } else {
-                                          // Show toast if the last deposit is not approved
-                                          AppUtils().toast(
-                                              "Please wait for your last withdraw to be approved.\nبراہ کرم اپنے آخری ڈپازٹ کے منظور ہونے کا انتظار کریں۔");
-                                        }
-                                      } else {
-                                        Get.to(
-                                          () => WithdrawView(
-                                            userModel: widget.userModel,
-                                          ),
-                                        );
-                                      }
+                                      Get.to(
+                                        () => WithdrawView(
+                                          userModel: widget.userModel,
+                                        ),
+                                      );
+                                      // final depositPro =
+                                      //     Provider.of<WithdrawProvider>(context,
+                                      //         listen: false);
+                                      // // Call this to fetch the latest deposits
+                                      // await depositPro.fetchDeposits();
+                                      // final lastDeposit = await depositPro
+                                      //     .getLastApprovedUserWithdraw(
+                                      //         widget.userModel.uid!);
+                                      // if (lastDeposit != null) {
+                                      //   if (lastDeposit.isApproved == true) {
+                                      //     // Navigate to the DepositMoneyCom screen
+                                      //     Get.to(
+                                      //       () => WithdrawView(
+                                      //         userModel: widget.userModel,
+                                      //       ),
+                                      //     );
+                                      //   } else {
+                                      //     // Show toast if the last deposit is not approved
+                                      //     AppUtils().toast(
+                                      //         "Please wait for your last withdraw to be approved.\nبراہ کرم اپنے آخری ڈپازٹ کے منظور ہونے کا انتظار کریں۔");
+                                      //   }
+                                      // } else {
+                                      //   Get.to(
+                                      //     () => WithdrawView(
+                                      //       userModel: widget.userModel,
+                                      //     ),
+                                      //   );
+                                      // }
                                     }
                                   },
                                   child: Card(
@@ -277,9 +281,6 @@ class _UserProfileState extends State<UserProfile> {
                       ),
                     ),
                   );
-                  // return const Center(
-                  //   child: Text("Please Login to conyinue"),
-                  // );
                 } else {
                   return const Center(
                     child: Text("Please Login to continue"),

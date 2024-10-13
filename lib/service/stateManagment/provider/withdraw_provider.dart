@@ -26,12 +26,20 @@ class WithdrawProvider with ChangeNotifier {
     return _depositService.getWithdraw();
   }
 
+  Stream<List<WithdrawModel>> getDepositStrFal() {
+    return _depositService.getWithdrawFalse();
+  }
+
   Stream<List<WithdrawModel>> getStrAdmin() {
     return _depositService.getWithdraw();
   }
 
-  Future<void> updateDepositForAdmin(WithdrawModel update, bool value) async {
+  Future<void> updateDepositForAdmin(
+    WithdrawModel update,
+    bool value,
+  ) async {
     update.isApproved = value;
+    // update.totalAmount = updateBalance;
     await _depositService.updateWithdraw(update);
   }
 
@@ -141,5 +149,40 @@ class WithdrawProvider with ChangeNotifier {
     } else {
       throw Exception("User document does not exist.");
     }
+  }
+
+  Future<void> giveBalance({
+    required String docId,
+    required int balance,
+  }) async {
+    final DocumentSnapshot userDoc =
+        await _db.collection('futureInvestUsers').doc(docId).get();
+    int currentBalance = userDoc['balance'] ?? 0;
+    int currentCoinBalance = userDoc['coinBalance'] ?? 0;
+    await _db.collection('futureInvestUsers').doc(docId).update({
+      'balance': currentBalance + balance,
+      'coinBalance': currentCoinBalance + balance,
+    });
+    // Get the current user balance and coin balance
+    // final DocumentSnapshot userDoc =
+    //     await _db.collection('futureInvestUsers').doc(docId).get();
+    //
+    // if (userDoc.exists) {
+
+    //
+    //   // Ensure there is enough balance for the withdrawal
+    //   if (currentBalance >= withdrawAmount &&
+    //       currentCoinBalance >= withdrawAmount) {
+    //     // Subtract the withdraw amount from the current balance and coin balance
+    //     await _db.collection('futureInvestUsers').doc(docId).update({
+    //       'balance': currentBalance - withdrawAmount,
+    //       'coinBalance': currentCoinBalance - withdrawAmount,
+    //     });
+    //   } else {
+    //     throw Exception("Insufficient balance for withdrawal.");
+    //   }
+    // } else {
+    //   throw Exception("User document does not exist.");
+    // }
   }
 }

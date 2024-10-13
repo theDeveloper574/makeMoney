@@ -90,4 +90,20 @@ class WithdrawService {
       },
     );
   }
+
+  Stream<List<WithdrawModel>> getWithdrawFalse() {
+    return _db
+        .collection('futureInvestWithdraw')
+        .where('isApproved', isEqualTo: false)
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => WithdrawModel.fromMap(doc.data()))
+              .toList(),
+        );
+  }
 }

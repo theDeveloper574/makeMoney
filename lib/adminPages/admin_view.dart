@@ -90,8 +90,8 @@ class _AdminViewState extends State<AdminView> {
                     );
                   },
                 ),
-                AdminButton(
-                  text: "Users List",
+                AdminButtonUsersBadgeUser(
+                  // text: "Users List",
                   onPressed: () {
                     Get.to(() => const UserListViewAdmin());
                   },
@@ -122,16 +122,16 @@ class _AdminViewState extends State<AdminView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                AdminButton(
-                  bgColor: Colors.black,
-                  text: "Withdraw List",
+                AdminButtonWithBadgeWith(
+                  // bgColor: Colors.black,
+                  // text: "Withdraw List",
                   onPressed: () {
                     Get.to(() => const WithdrawAdminView());
                   },
                 ),
-                AdminButton(
-                  bgColor: Colors.black,
-                  text: "Transaction List",
+                AdminButtonWithBadge(
+                  // bgColor: Colors.black,
+                  // text: "Transaction List",
                   onPressed: () {
                     Get.to(() => const TransactionView());
                   },

@@ -77,6 +77,22 @@ class UserAccounts {
     });
   }
 
+  Stream<List<UserModel>> getUserSnpAdminFalse() {
+    return _db
+        // .collection('users')
+        .collection('futureInvestUsers')
+        .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+        .where('paymentStatus', isEqualTo: false)
+        .orderBy('uid')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs.map((e) {
+        return UserModel.fromMap(e.data());
+      }).toList();
+    });
+  }
+
   ///try to update some values
   Future<void> deleteUser(UserModel user) async {
     // await _db.collection('users').doc(user.uid).update(user.toMap());

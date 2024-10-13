@@ -6,14 +6,17 @@ import 'package:provider/provider.dart';
 
 import '../../service/model/user_model.dart';
 import '../../service/stateManagment/provider/user_account_provider.dart';
+import '../../service/stateManagment/provider/withdraw_provider.dart';
 import '../../widgets/image_view.dart';
 
 class UserCard extends StatelessWidget {
   final UserModel user;
-  const UserCard({super.key, required this.user});
+  UserCard({super.key, required this.user});
+  final amount = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final adminPro = Provider.of<UserAccountProvider>(context, listen: false);
+    final balance = Provider.of<WithdrawProvider>(context, listen: false);
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(
@@ -105,7 +108,29 @@ class UserCard extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 8),
+            GestureDetector(
+              onTap: () async {
+                AppUtils().customDialog(
+                  controller: amount,
+                  isTextField: true,
+                  context: context,
+                  onDone: () async {
+                    balance.giveBalance(
+                      docId: user.uid!,
+                      balance: int.parse(amount.text),
+                    );
+                    Get.back();
+                    AppUtils().toast("Balance added");
+                  },
+                  title: "Give Balance",
+                  des: 'Give Balance',
+                  onDoneTxt: 'yes',
+                );
+              },
+              child: const Icon(Icons.attach_money),
+            ),
           ],
         ),
         trailing: Column(

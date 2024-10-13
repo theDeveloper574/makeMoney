@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:makemoney/core/commen/constants.dart';
-import 'package:makemoney/pages/accountsView/create_user_account.dart';
 import 'package:makemoney/pages/accountsView/phone_auth.dart';
 import 'package:makemoney/pages/views/chat_view.dart';
 import 'package:makemoney/pages/views/cu_user_profile_view.dart';
@@ -15,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../../core/commen/app_utils.dart';
 import '../../service/stateManagment/provider/fetch_task_provider.dart';
 import '../../widgets/binance_ad_widget.dart';
+import '../accountsView/google_auth.dart';
 import '../views/chat_user_view.dart';
 
 class BusinessCom extends StatefulWidget {
@@ -112,7 +112,7 @@ class _BusinessComState extends State<BusinessCom> {
                   text2: 'Google',
                   image: AuthIcon.google,
                   onTap: () {
-                    Get.to(() => CrateUserAccount());
+                    Get.to(() => GoogleAccountUser());
                   },
                 ),
                 Boxes(

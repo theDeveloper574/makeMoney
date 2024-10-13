@@ -1,8 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:get/get.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:makemoney/core/commen/app_utils.dart';
 import 'package:makemoney/service/firestoreServices/userService/user_service.dart';
 import 'package:makemoney/service/model/user_model.dart';
+
+import '../../../pages/home.dart';
 
 class CuUserProvider extends ChangeNotifier {
   final UserService _userService = UserService();
@@ -152,23 +158,63 @@ class CuUserProvider extends ChangeNotifier {
       throw Exception("User document does not exist.");
     }
   }
-  //final updateBalance = Provider.of<CuUserProvider>(context, listen: false);
-// final withdrawPro = Provider.of<WithdrawProvider>(context, listen: false);
-//
-// AppUtils().customDialog(
-//   context: context,
-//   onDone: () async {
-//     // Subtract the withdrawal amount from user's balance
-//     await updateBalance.subtractFromUserBalance(
-//       docId: transaction.uid!,
-//       withdrawAmount: transaction.withdrawAmount!,
-//     );
-//     await withdrawPro.updateWithdrawForAdmin(transaction, true);
-//     AppUtils().toast('User Withdrawal Accepted.');
-//     Get.back();
-//   },
-//   title: "Withdraw Payment",
-//   des: "approve the withdrawal",
-//   onDoneTxt: 'yes',
-// );
+
+  // Method to sign in with email and password
+  Future<void> signInWithEmail(
+      String email, String password, BuildContext context) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      // Sign in with email and password
+      context.loaderOverlay.show();
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      _user = await _userService.getUser(
+        userCredential.user!.uid,
+      );
+      Get.offAll(() => const HomePage());
+      AppUtils().toast("Login successfully");
+      context.loaderOverlay.hide();
+    } on FirebaseAuthException catch (e) {
+      context.loaderOverlay.hide();
+      AppUtils().toast(e.message.toString());
+      if (kDebugMode) {
+        print("Error signing in: $e");
+      }
+    }
+
+    _isLoading = false;
+    notifyListeners(); // Notify that data has changed
+  }
+
+  Future<void> signUpWithEmail(String email, String password) async {
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      // Sign up with email and password
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      // Optionally, you can also set the display name or any other info
+      await userCredential.user!
+          .updateProfile(displayName: email.split('@')[0]);
+
+      // Load the user from Firestore after creation (if necessary)
+      _user = await _userService.getUser(userCredential.user!.uid);
+    } on FirebaseAuthException catch (e) {
+      if (kDebugMode) {
+        print("Error signing up: ${e.message}");
+      }
+    }
+    _isLoading = false;
+    notifyListeners(); // Notify that data has changed
+  }
 }

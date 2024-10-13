@@ -75,4 +75,20 @@ class DepositService {
         .map((doc) => DepositModel.fromMap(doc.data()))
         .toList();
   }
+
+  Stream<List<DepositModel>> getDepositFalse() {
+    return _db
+        .collection('futureInvestDeposit')
+        .where('isApproved', isEqualTo: false)
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => DepositModel.fromMap(doc.data()))
+              .toList(),
+        );
+  }
 }
