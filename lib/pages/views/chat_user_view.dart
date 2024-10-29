@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
 import 'package:makemoney/core/commen/app_utils.dart';
-import 'package:makemoney/service/model/user_model.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -29,6 +28,7 @@ class _ChatUserViewState extends State<ChatUserView> {
     _controller.initialize();
     final userCount = Provider.of<UserAccountProvider>(context, listen: false);
     userCount.fetchUsers();
+    userCount.fetchUsersInvest();
     super.initState();
   }
 
@@ -58,7 +58,7 @@ class _ChatUserViewState extends State<ChatUserView> {
                         aspectRatio: _controller.value.aspectRatio,
                         child: VideoPlayer(_controller),
                       )
-                    : Center(
+                    : const Center(
                         child: CircularProgressIndicator(
                           color: Colors.white,
                         ),
@@ -96,8 +96,8 @@ class _ChatUserViewState extends State<ChatUserView> {
             child: Consumer<UserAccountProvider>(
               builder: (context, value, child) {
                 if (value.users.isEmpty) {
-                  return Center(
-                    child: CircularProgressIndicator(),
+                  return const Center(
+                    child: Text("No users."),
                   );
                 } else {
                   return ListView.builder(

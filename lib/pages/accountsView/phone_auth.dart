@@ -16,6 +16,23 @@ class PhoneAuthView extends StatefulWidget {
 class _PhoneAuthViewState extends State<PhoneAuthView> {
   final phoneCon = TextEditingController();
   final otpVerify = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    final provider = Provider.of<UserAccount>(context, listen: false);
+    provider.disposeValue();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    phoneCon.dispose();
+    otpVerify.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

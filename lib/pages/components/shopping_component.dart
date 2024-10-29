@@ -5,6 +5,8 @@ import 'package:makemoney/pages/components/cloths_gallery.dart';
 import 'package:makemoney/pages/components/flowers_gallery.dart';
 import 'package:makemoney/widgets/boxes.dart';
 
+import '../buy-Sell/buysell_view.dart';
+
 class ShoppingComponent extends StatefulWidget {
   const ShoppingComponent({super.key});
 
@@ -48,6 +50,26 @@ class _ShoppingComponentState extends State<ShoppingComponent> {
                   },
                 ),
               ],
+            ),
+          ),
+          const Text(
+            "خرید فروخت",
+            style: TextStyle(fontSize: 32),
+          ),
+          const SizedBox(height: 8),
+          InkWell(
+            onTap: () {
+              Get.to(() => BuySellScreen());
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset('assets/logos/buy-sell-img.jpg'),
+              ),
             ),
           )
         ],
