@@ -12,9 +12,12 @@ import '../../widgets/image_view.dart';
 class UserCard extends StatelessWidget {
   final UserModel user;
   UserCard({super.key, required this.user});
-  final amount = TextEditingController();
+  final giveAmount = TextEditingController();
+  final takeAmount = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    // user.balance = int.parse(giveAmount.text);
+    // user.balance = int.parse(giveAmount.text);
     final adminPro = Provider.of<UserAccountProvider>(context, listen: false);
     final balance = Provider.of<WithdrawProvider>(context, listen: false);
     return Card(
@@ -110,27 +113,55 @@ class UserCard extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            GestureDetector(
-              onTap: () async {
-                AppUtils().customDialog(
-                  controller: amount,
-                  isTextField: true,
-                  context: context,
-                  onDone: () async {
-                    balance.giveBalance(
-                      docId: user.uid!,
-                      balance: int.parse(amount.text),
+            Row(
+              children: [
+                GestureDetector(
+                  onTap: () async {
+                    AppUtils().customDialog(
+                      balance: user.balance.toString(),
+                      controller: giveAmount,
+                      isTextField: true,
+                      context: context,
+                      onDone: () async {
+                        balance.giveBalance(
+                          docId: user.uid!,
+                          balance: int.parse(giveAmount.text),
+                        );
+                        Get.back();
+                        AppUtils().toast("Balance added");
+                      },
+                      title: "Give Balance",
+                      des: 'Give Balance',
+                      onDoneTxt: 'yes',
                     );
-                    Get.back();
-                    AppUtils().toast("Balance added");
                   },
-                  title: "Give Balance",
-                  des: 'Give Balance',
-                  onDoneTxt: 'yes',
-                );
-              },
-              child: const Icon(Icons.attach_money),
-            ),
+                  child: const Icon(Icons.attach_money),
+                ),
+                const SizedBox(width: 8),
+                GestureDetector(
+                  onTap: () async {
+                    AppUtils().customDialog(
+                      balance: user.balance.toString(),
+                      controller: takeAmount,
+                      isTextField: true,
+                      context: context,
+                      onDone: () async {
+                        balance.deductBalance(
+                          docId: user.uid!,
+                          balance: int.parse(takeAmount.text),
+                        );
+                        Get.back();
+                        AppUtils().toast("Balance deducted.");
+                      },
+                      title: "Take Balance",
+                      des: 'Take Balance',
+                      onDoneTxt: 'yes',
+                    );
+                  },
+                  child: const Icon(Icons.remove_circle),
+                ),
+              ],
+            )
           ],
         ),
         trailing: Column(

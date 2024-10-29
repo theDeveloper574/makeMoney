@@ -185,4 +185,24 @@ class WithdrawProvider with ChangeNotifier {
     //   throw Exception("User document does not exist.");
     // }
   }
+
+  Future<void> deductBalance({
+    required String docId,
+    required int balance,
+  }) async {
+    final DocumentSnapshot userDoc =
+        await _db.collection('futureInvestUsers').doc(docId).get();
+    int currentBalance = userDoc['balance'] ?? 0;
+    int currentCoinBalance = userDoc['coinBalance'] ?? 0;
+
+    // Ensure balance does not go below zero
+    int newBalance = currentBalance >= balance ? currentBalance - balance : 0;
+    int newCoinBalance =
+        currentCoinBalance >= balance ? currentCoinBalance - balance : 0;
+
+    await _db.collection('futureInvestUsers').doc(docId).update({
+      'balance': newBalance,
+      'coinBalance': newCoinBalance,
+    });
+  }
 }

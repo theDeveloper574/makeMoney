@@ -97,7 +97,7 @@ class _ChatUserViewState extends State<ChatUserView> {
               builder: (context, value, child) {
                 if (value.users.isEmpty) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: Text("No users."),
                   );
                 } else {
                   return ListView.builder(

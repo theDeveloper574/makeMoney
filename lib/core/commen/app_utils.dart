@@ -121,6 +121,7 @@ class AppUtils {
   void customDialog({
     required BuildContext context,
     required Function() onDone,
+    String? balance,
     required String title,
     required String des,
     required String onDoneTxt,
@@ -131,7 +132,17 @@ class AppUtils {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(title),
+          title: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(title),
+              Text(
+                "Rs.$balance" ?? '0',
+                style: const TextStyle(fontSize: 14),
+              )
+            ],
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

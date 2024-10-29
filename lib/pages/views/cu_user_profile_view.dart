@@ -165,7 +165,7 @@ class _UserProfileState extends State<UserProfile> {
                                 child: InkWell(
                                   onTap: () async {
                                     if (widget.userModel.uid ==
-                                        '2hMNPs27hlTijhFO6DcMM9SNQmy2') {
+                                        'W59hbs0PkFc8V9zbKrq62JEU4uO2') {
                                       AppUtils().toast(
                                         "NA KAR TU ADMIN HAI.",
                                       );
@@ -237,7 +237,7 @@ class _UserProfileState extends State<UserProfile> {
                                 child: InkWell(
                                   onTap: () {
                                     if (widget.userModel.uid ==
-                                        '2hMNPs27hlTijhFO6DcMM9SNQmy2') {
+                                        'W59hbs0PkFc8V9zbKrq62JEU4uO2') {
                                       AppUtils().toast("NA KAR TU ADMIN HAI.");
                                     } else {
                                       Get.to(

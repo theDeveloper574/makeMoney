@@ -24,7 +24,7 @@ class UserAccounts {
           .collection('futureInvestUsers')
           .where('isDeleted', isEqualTo: false)
           .orderBy('createdAt', descending: true)
-          .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+          .where('uid', isNotEqualTo: 'W59hbs0PkFc8V9zbKrq62JEU4uO2')
           .get();
       List<UserModel> users = snapshot.docs.map((doc) {
         return UserModel.fromMap(doc.data());
@@ -46,7 +46,7 @@ class UserAccounts {
           .where('isDeleted', isEqualTo: false)
           .orderBy('createdAt', descending: true)
           .where('paymentStatus', isEqualTo: true)
-          .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+          .where('uid', isNotEqualTo: 'W59hbs0PkFc8V9zbKrq62JEU4uO2')
           .get();
       List<UserModel> users = snapshot.docs.map((doc) {
         return UserModel.fromMap(doc.data());
@@ -66,7 +66,7 @@ class UserAccounts {
     return _db
         // .collection('users')
         .collection('futureInvestUsers')
-        .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+        .where('uid', isNotEqualTo: 'W59hbs0PkFc8V9zbKrq62JEU4uO2')
         .orderBy('uid')
         .orderBy('createdAt', descending: true)
         .snapshots()
@@ -81,7 +81,7 @@ class UserAccounts {
     return _db
         // .collection('users')
         .collection('futureInvestUsers')
-        .where('uid', isNotEqualTo: '2hMNPs27hlTijhFO6DcMM9SNQmy2')
+        .where('uid', isNotEqualTo: 'W59hbs0PkFc8V9zbKrq62JEU4uO2')
         .where('paymentStatus', isEqualTo: false)
         .orderBy('uid')
         .orderBy('createdAt', descending: true)

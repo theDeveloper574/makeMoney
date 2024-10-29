@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         backgroundColor: Colors.green,
         actions: [
-          // cuProvider.user?.uid == "2hMNPs27hlTijhFO6DcMM9SNQmy2"
+          // cuProvider.user?.uid == "W59hbs0PkFc8V9zbKrq62JEU4uO2"
           //     ? InkWell(
           //         onTap: () {
           //           Get.to(() => const AdminView());
@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
           //     : const SizedBox(),
           Consumer<CuUserProvider>(builder: (context, value, child) {
             if (value.user != null) {
-              if (value.user!.uid == '2hMNPs27hlTijhFO6DcMM9SNQmy2') {
+              if (value.user!.uid == 'W59hbs0PkFc8V9zbKrq62JEU4uO2') {
                 return InkWell(
                   onTap: () {
                     Get.to(() => const AdminView());

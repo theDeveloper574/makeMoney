@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:makemoney/core/commen/app_utils.dart';
 import 'package:makemoney/service/model/user_model.dart';
@@ -10,6 +9,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../service/model/deposit_model.dart';
 import '../../service/stateManagment/provider/deposit_provider.dart';
+import '../../widgets/account_info_widget.dart';
 
 class DepositMoneyCom extends StatefulWidget {
   final UserModel? userModel;
@@ -52,39 +52,35 @@ class _DepositMoneyComState extends State<DepositMoneyCom> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Text(
-                        "Jazz Cash Acc Name:",
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w800),
-                      ),
-                      const Text(
-                        "NEELAM SHABIR",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.w800),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "0308 2347242",
-                            style: TextStyle(
-                                fontSize: 22, fontWeight: FontWeight.w800),
-                          ),
-                          const SizedBox(width: 16),
-                          InkWell(
-                            onTap: () {
-                              Clipboard.setData(
-                                const ClipboardData(text: '03082347242'),
-                              );
-                              AppUtils().toast('نمبر کاپی ہو گیا ہے');
-                            },
-                            child: const Icon(
-                              Icons.copy,
-                              size: 20,
-                            ),
-                          )
-                        ],
-                      ),
+                      const AccountInfo(),
+                      // const Text(
+                      //   "NEELAM SHABIR",
+                      //   style: TextStyle(
+                      //       fontSize: 18, fontWeight: FontWeight.w800),
+                      // ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     const Text(
+                      //       "0308 2347242",
+                      //       style: TextStyle(
+                      //           fontSize: 22, fontWeight: FontWeight.w800),
+                      //     ),
+                      //     const SizedBox(width: 16),
+                      //     InkWell(
+                      //       onTap: () {
+                      //         Clipboard.setData(
+                      //           const ClipboardData(text: '03082347242'),
+                      //         );
+                      //         AppUtils().toast('نمبر کاپی ہو گیا ہے');
+                      //       },
+                      //       child: const Icon(
+                      //         Icons.copy,
+                      //         size: 20,
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
                       const SizedBox(height: 20),
                       const Text(
                         "واٹس ایپ پر رقم کا اسکرین شاٹ بھیجیں",

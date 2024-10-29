@@ -10,6 +10,7 @@ import 'adminView/buy_sell_list_view.dart';
 import 'adminView/mobile_app_list_view.dart';
 import 'adminView/task_dialog_view.dart';
 import 'adminView/transection_view.dart';
+import 'adminView/update_account_info_admin_view.dart';
 import 'adminView/withdraw_view.dart';
 
 class AdminView extends StatefulWidget {
@@ -137,6 +138,17 @@ class _AdminViewState extends State<AdminView> {
                   },
                 ),
               ],
+            ),
+            SizedBox(height: Get.height * 0.02),
+            ElevatedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => const UpdateAccountDialog(),
+                );
+                // UpdateAccountDialog();
+              },
+              child: Text("Update Account Info"),
             ),
           ],
         ),
