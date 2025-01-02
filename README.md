@@ -1,4 +1,4 @@
-# makemoney
+# Make Money
 
 The Future Invest app is a user-friendly platform designed to help individuals manage and grow their investments. It provides real-time market data, personalized investment recommendations, and seamless transaction processing. With secure user authentication and integrated analytics, the app empowers users to make informed investment decisions and track their portfolio’s performance.      
 
